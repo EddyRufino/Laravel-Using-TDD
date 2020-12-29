@@ -5,45 +5,74 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\Project;
+use App\Models\User;
 use Tests\TestCase;
 
 class ProjectsTest extends TestCase
 {
-    use WithFaker, RefreshDatabase;
+  use WithFaker, RefreshDatabase;
 
-    /** @test */
-    public function a_user_can_create_project()
-    {
-        $this->withoutExceptionHandling();
-        // $this->withExceptionHandling();
+  /** @test */
+  public function only_authenticated_users_can_create_projects()
+  {
+    // $this->withoutExceptionHandling();
 
-        $data = [
-            'title'         => $this->faker->sentence,
-            'description'   => $this->faker->paragraph,
-        ];
+    $data = Project::factory()->raw();
+    
+    $this->post('/projects', $data)->assertRedirect('login');
+  }
 
-        $this->post('/projects', $data)->assertRedirect('/projects');
 
-        $this->assertDatabaseHas('projects', $data);
+  /** @test */
+  public function a_user_can_create_project()
+  {
+    // $this->withoutExceptionHandling();
+    $this->actingAs(User::factory()->create());
 
-        $this->get('/projects')->assertSee($data['title']);
-    }
+    $data = [
+      'title'         => $this->faker->sentence,
+      'description'   => $this->faker->paragraph,
+    ];
 
-    /** @test */
-    public function a_project_require_a_title()
-    {
-        $data = Project::factory()->raw(['title' => '']);
+    $this->post('/projects', $data)->assertRedirect('/projects');
 
-        $this->post('/projects', $data)
-            ->assertSessionHasErrors('title');
-    }
+    $this->assertDatabaseHas('projects', $data);
 
-    /** @test */
-    public function a_project_require_a_description()
-    {
-        $data = Project::factory()->raw(['description' => '']);
-        
-        $this->post('/projects', $data)
-            ->assertSessionHasErrors('description');
-    }
+    $this->get('/projects')->assertSee($data['title']);
+  }
+
+  /** @test */
+  public function a_project_require_a_title()
+  {
+    $this->actingAs(User::factory()->create());
+
+    $data = Project::factory()->raw(['title' => '']);
+
+    $this->post('/projects', $data)
+        ->assertSessionHasErrors('title');
+  }
+
+  /** @test */
+  public function a_project_require_a_description()
+  {
+    $this->actingAs(User::factory()->create());
+
+    $data = Project::factory()->raw(['description' => '']);
+    
+    $this->post('/projects', $data)
+        ->assertSessionHasErrors('description');
+  }
+
+  /** @test */
+  public function a_user_can_view_a_project()
+  {
+    $this->withoutExceptionHandling(); // Porque sino sale html
+
+    $project = Project::factory()->create();
+
+    $this->get($project->path())
+      ->assertSee($project->title)
+      ->assertSee($project->description);
+  }
+
 }

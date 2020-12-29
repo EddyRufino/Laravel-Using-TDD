@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $guarded = [];
+  protected $guarded = [];
+
+  public function path()
+  {
+  	return "/projects/{$this->id}";
+  }
 }
