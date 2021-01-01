@@ -86,13 +86,12 @@ class ManageProjectsTest extends TestCase
   /** @test */
   public function a_user_can_view_their_project()
   {
-    $this->withoutExceptionHandling(); // Porque sino sale html
-
     $this->actingAs(User::factory()->create());
 
-    $project = Project::factory()->create(
-      ['owner_id' => auth()->id()]
-    );
+    // Porque sino sale html
+    $this->withoutExceptionHandling();
+
+    $project = Project::factory()->create(['owner_id' => auth()->id()]);
     
     $this->get($project->path())
       ->assertSee($project->title)
