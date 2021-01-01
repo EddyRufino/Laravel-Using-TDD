@@ -33,7 +33,7 @@ class ManageProjectsTest extends TestCase
   {
     $this->withoutExceptionHandling();
 
-    $this->actingAs(User::factory()->create());
+    $this->signIn();
 
     $this->get('/projects/create')->assertStatus(200);
 
@@ -54,7 +54,7 @@ class ManageProjectsTest extends TestCase
   {
     // $this->withoutExceptionHandling();
 
-    $this->actingAs(User::factory()->create());
+    $this->signIn();
 
     $project = Project::factory()->create();
 
@@ -64,7 +64,7 @@ class ManageProjectsTest extends TestCase
   /** @test */
   public function a_project_require_a_title()
   {
-    $this->actingAs(User::factory()->create());
+    $this->signIn();
 
     $data = Project::factory()->raw(['title' => '']);
 
@@ -75,7 +75,7 @@ class ManageProjectsTest extends TestCase
   /** @test */
   public function a_project_require_a_description()
   {
-    $this->actingAs(User::factory()->create());
+    $this->signIn();
 
     $data = Project::factory()->raw(['description' => '']);
     
@@ -86,10 +86,9 @@ class ManageProjectsTest extends TestCase
   /** @test */
   public function a_user_can_view_their_project()
   {
-    $this->actingAs(User::factory()->create());
+    $this->withoutExceptionHandling(); // Porque sino sale html
 
-    // Porque sino sale html
-    $this->withoutExceptionHandling();
+    $this->signIn();
 
     $project = Project::factory()->create(['owner_id' => auth()->id()]);
     
