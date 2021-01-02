@@ -19,6 +19,7 @@ class CreateTasksTable extends Migration
                 ->constrained('projects')
                 ->onDelete('cascade');
             $table->text('body');
+            $table->boolean('completed')->default(false);
             $table->timestamps();
         });
     }

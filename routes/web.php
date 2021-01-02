@@ -18,7 +18,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
 	Route::post('projects', [ProjectController::class, 'store'])->name('projects.store');
 
-	Route::post('projects/{project}/tasks', [ProjectTaskController::class, 'store']);
+	Route::post('projects/{project}/tasks', [ProjectTaskController::class, 'store'])->name('project.task.store');
+	Route::patch('projects/{project}/tasks/{task}', [ProjectTaskController::class, 'update']);
 });
 
 require __DIR__.'/auth.php';
