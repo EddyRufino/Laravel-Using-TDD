@@ -31,6 +31,11 @@ class ProjectTaksTest extends TestCase
   {
     $this->withoutExceptionHandling();
 
+    // $project = app(ProjectFactory::class)
+    //   ->ownedBy($this->signIn())
+    //   ->withTasks(1)
+    //   ->create();
+
     $this->signIn();
 
     $project = auth()->user()->projects()->create(

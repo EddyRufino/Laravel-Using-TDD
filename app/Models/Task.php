@@ -11,6 +11,8 @@ class Task extends Model
 
   protected $guarded = [];
 
+  protected $touches = ['project']; // Actualizo una tarea this ayuda a ordenarla
+
   public function project()
   {
   	return $this->belongsTo(Project::class);

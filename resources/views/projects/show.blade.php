@@ -4,10 +4,10 @@
 			<p class="mr-auto text-grey text-sm font-normal mb-3 md:mb-0">
 				<a href="{{ route('projects') }}">My Projects</a> / {{ $project->title }}
 			</p>
-			<a href="{{ route('projects.create') }}"
+			<a href="{{ route('projects.edit', $project) }}"
 				class="button" 
 			>
-				New Project
+				Edit Project
 			</a>
 		</div>
 	</header>
@@ -56,9 +56,21 @@
 
 			<div>
 				<h2 class="text-lg text-grey font-normal mb-3">General Notes</h2>
-				<textarea class="card w-full" style="min-height: 200px">
-					Lorem Ipsum.
-				</textarea>
+				<form method="POST" action="{{ $project->path() }}">
+					@csrf
+					@method('PATCH')
+
+					<textarea
+						name="notes"
+						class="card w-full mb-4"
+						rows="10"
+						placeholder="Anything special that you want to make a note of"
+					>
+						{{ $project->notes }}
+					</textarea>
+
+					<button type="submit" class="button">Save</button>
+				</form>
 			</div>
 		</div>
 

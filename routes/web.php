@@ -15,8 +15,10 @@ Route::get('/dashboard', function () {
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('projects', [ProjectController::class, 'index'])->name('projects');
 	Route::get('projects/create', [ProjectController::class, 'create'])->name('projects.create');
-	Route::get('projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
-	Route::post('projects', [ProjectController::class, 'store'])->name('projects.store');
+	Route::get('projects/{project}', [ProjectController::class, 'show']);
+	Route::get('projects/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
+	Route::patch('projects/{project}', [ProjectController::class, 'update']);
+	Route::post('projects', [ProjectController::class, 'store']);
 
 	Route::post('projects/{project}/tasks', [ProjectTaskController::class, 'store'])->name('project.task.store');
 	Route::patch('projects/{project}/tasks/{task}', [ProjectTaskController::class, 'update']);
