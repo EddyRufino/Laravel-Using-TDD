@@ -76,6 +76,18 @@ class ManageProjectsTest extends TestCase
   }
 
   /** @test */
+  public function a_user_can_update_a_project_general_notes()
+  {
+    $this->signIn();
+
+    $project = Project::factory()->create(['owner_id' => auth()->id()]);
+
+    $this->patch($project->path(), $data = ['notes' => 'changed']);
+
+    $this->assertDatabaseHas('projects', $data);
+  }
+
+  /** @test */
   public function an_authenticated_user_cannot_view_the_projects_of_others()
   {
     // $this->withoutExceptionHandling();
