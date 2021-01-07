@@ -20,6 +20,7 @@ class CreateActivitiesTable extends Migration
                 ->onDelete('cascade');
             $table->nullableMorphs('subject');
             $table->string('description');
+            $table->text('changes')->nullable();
             $table->timestamps();
         });
     }
