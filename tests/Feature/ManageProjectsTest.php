@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+// use Facades\Tests\Setup\ProjectFactory;
 use App\Models\Project;
 use App\Models\User;
 use Tests\TestCase;
@@ -53,6 +54,35 @@ class ManageProjectsTest extends TestCase
       ->assertSee($data['title'])
       ->assertSee($data['description'])
       ->assertSee($data['notes']);
+  }
+
+  /** @test */
+  public function unauthorized_users_cannot_delete_projects()
+  {
+    $project = Project::factory()->create();
+    
+    $this->delete($project->path())
+      ->assertRedirect('/login');
+
+    $this->signIn();
+
+    $this->delete($project->path())
+      ->assertStatus(403);
+
+  }
+
+  /** @test */
+  public function a_user_can_delete_a_project()
+  {
+    $this->withoutExceptionHandling();
+
+    $this->signIn();
+
+    $project = Project::factory()->create(['owner_id' => auth()->id()]);
+
+    $this->delete($project->path())->assertRedirect('/projects');
+
+    $this->assertDatabaseMissing('projects', $project->only('id'));
   }
 
   /** @test */
