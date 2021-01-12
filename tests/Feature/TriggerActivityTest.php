@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Facades\Tests\Setup\ProjectFactory;
 use App\Models\Project;
 use App\Models\Task;
 use Tests\TestCase;
@@ -75,40 +76,38 @@ class TriggerActivityTest extends TestCase
   /** @test */
   public function completing_a_task()
   {
-    $project = Project::factory()->create();
+    $project = ProjectFactory::withTasks(1)->create();
 
-    $task = Task::factory()->create(['project_id' => $project]);
-    
-    $this->signIn($project->owner)->patch($project->tasks[0]->path(), [
-      'body' => 'foobar',
-      'completed' => true
-    ]);
+    $this->actingAs($project->owner)
+        ->patch($project->tasks[0]->path(), [
+            'body' => 'foobar',
+            'completed' => true
+        ]);
 
     $this->assertCount(3, $project->activity);
 
     tap($project->activity->last(), function ($activity) {
-      $this->assertEquals('completed_task', $activity->description);
-      $this->assertInstanceOf(Task::class, $activity->subject);
+        $this->assertEquals('completed_task', $activity->description);
+        $this->assertInstanceOf(Task::class, $activity->subject);
     });
   }
 
   /** @test */
   public function incompleting_a_task()
   {
-    $project = Project::factory()->create();
+    $project = ProjectFactory::withTasks(1)->create();
 
-    $task = Task::factory()->create(['project_id' => $project]);
-    
-    $this->signIn($project->owner)->patch($project->tasks[0]->path(), [
-      'body' => 'foobar',
-      'completed' => true
-    ]);
+    $this->actingAs($project->owner)
+        ->patch($project->tasks[0]->path(), [
+            'body' => 'foobar',
+            'completed' => true
+        ]);
 
     $this->assertCount(3, $project->activity);
 
     $this->patch($project->tasks[0]->path(), [
-      'body' => 'foobar',
-      'completed' => false
+        'body' => 'foobar',
+        'completed' => false
     ]);
 
     $project->refresh();

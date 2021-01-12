@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-// use Facades\Tests\Setup\ProjectFactory;
+use Facades\Tests\Setup\ProjectFactory;
 use App\Models\Project;
 use App\Models\User;
 use Tests\TestCase;
@@ -54,6 +54,14 @@ class ManageProjectsTest extends TestCase
       ->assertSee($data['title'])
       ->assertSee($data['description'])
       ->assertSee($data['notes']);
+  }
+
+  /** @test */
+  public function a_user_can_see_all_projects_they_have_been_invited_to_on_the_dashbord()
+  {
+    $project = tap(ProjectFactory::create())->invite($this->signIn());
+
+    $this->get('/projects')->assertSee($project->title);
   }
 
   /** @test */

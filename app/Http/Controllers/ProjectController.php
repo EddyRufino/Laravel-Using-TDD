@@ -10,7 +10,7 @@ class ProjectController extends Controller
 {
 	public function index()
 	{
-		$projects = auth()->user()->projects;
+		$projects = auth()->user()->accesibleProjects();
 
 		return view('projects.index', compact('projects'));
 	}

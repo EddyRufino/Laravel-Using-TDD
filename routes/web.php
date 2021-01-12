@@ -13,13 +13,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::get('projects', [ProjectController::class, 'index'])->name('projects');
-	Route::get('projects/create', [ProjectController::class, 'create'])->name('projects.create');
-	Route::get('projects/{project}', [ProjectController::class, 'show']);
-	Route::get('projects/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
-	Route::patch('projects/{project}', [ProjectController::class, 'update']);
-	Route::post('projects', [ProjectController::class, 'store']);
-	Route::delete('projects/{project}', [ProjectController::class, 'destroy']);
+
+	Route::resource('projects', ProjectController::class);
 
 	Route::post('projects/{project}/tasks', [ProjectTaskController::class, 'store'])->name('project.task.store');
 	Route::patch('projects/{project}/tasks/{task}', [ProjectTaskController::class, 'update']);

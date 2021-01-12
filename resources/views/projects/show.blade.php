@@ -2,7 +2,7 @@
 	<header class="lg:flex items-center mb-3 py-4">
 		<div class="lg:flex justify-between items-end w-full">
 			<p class="mr-auto text-grey text-sm font-normal mb-3 md:mb-0">
-				<a href="{{ route('projects') }}">My Projects</a> / {{ $project->title }}
+				<a href="{{ route('projects.index') }}">My Projects</a> / {{ $project->title }}
 			</p>
 			<a href="{{ route('projects.edit', $project) }}"
 				class="button" 
