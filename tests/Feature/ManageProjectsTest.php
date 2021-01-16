@@ -36,21 +36,8 @@ class ManageProjectsTest extends TestCase
 
     $this->get('/projects/create')->assertStatus(200);
 
-    $data = [
-      'title'       => $this->faker->sentence,
-      'description' => $this->faker->sentence,
-      'notes'       => 'General notes'
-    ];
-
-    $response = $this->post('/projects', $data);
-
-    $project = Project::where($data)->first();
-
-    $response->assertRedirect($project->path());
-
-    $this->assertDatabaseHas('projects', $data);
-
-    $this->get($project->path())
+    $this->followingRedirects()
+      ->post('/projects', $data = Project::factory()->raw())
       ->assertSee($data['title'])
       ->assertSee($data['description'])
       ->assertSee($data['notes']);
@@ -72,10 +59,13 @@ class ManageProjectsTest extends TestCase
     $this->delete($project->path())
       ->assertRedirect('/login');
 
-    $this->signIn();
+    $user = $this->signIn();
 
-    $this->delete($project->path())
-      ->assertStatus(403);
+    $this->delete($project->path())->assertStatus(403);
+
+    $project->invite($user);
+
+    $this->actingAs($user)->delete($project->path())->assertStatus(403);
 
   }
 
