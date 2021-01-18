@@ -18,6 +18,12 @@
                 </div>
             </div>
 
+            <div class="flex-1"></div>
+
+            <div id="app" class="flex items-center">
+                <theme-switcher></theme-switcher>
+            </div>
+
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
