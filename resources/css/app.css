@@ -4,3 +4,7 @@
 
 /* Custom Style */
 @import 'tailwind';
+
+@import 'themes/light';
+@import 'themes/dark';
+

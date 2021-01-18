@@ -1,5 +1,5 @@
 <div class="card flex flex-col mt-3">
-	<h3 class="text-xl py-4 -ml-5 border-l-4 border-blue-light pl-4">
+	<h3 class="text-xl text-default py-4 -ml-5 border-l-4 border-blue-light pl-4">
 		Invite a User
 	</h3>
 
